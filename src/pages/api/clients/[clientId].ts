@@ -6,15 +6,28 @@ export const prerender = false;
 
 export const GET: APIRoute = async ({ params }) => {
     const clientId = params.clientId ?? '';
+    const id = Number(clientId);
 
-    const client = await db.select().from(Clients)
-        .where(eq(Clients.id, Number(clientId)));
-
-    if (client.length === 0) {
+    if (isNaN(id)) {
         return new Response(
-            JSON.stringify({ msg: `Client with id: ${clientId} not found` }),
+            JSON.stringify({ msg: `Invalid client ID: ${clientId}` }),
             {
-                status: 404,
+                status: 400,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+    }
+
+    const clients = await db.select().from(Clients)
+        .where(eq(Clients.id, id));
+
+    if (clients.length > 0) {
+        return new Response(
+            JSON.stringify(clients[0]),
+            {
+                status: 200,
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -23,16 +36,15 @@ export const GET: APIRoute = async ({ params }) => {
     }
 
     return new Response(
-        JSON.stringify(client[0]),
+        JSON.stringify({ msg: `Client with id: ${clientId} not found` }),
         {
-            status: 200,
+            status: 404,
             headers: {
                 'Content-Type': 'application/json'
             }
         }
     );
 };
-
 export const PATCH: APIRoute = async ({ params, request }) => {
     try {
         const clientId = params.clientId ?? '';
