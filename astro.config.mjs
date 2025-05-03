@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 import cloudflare from '@astrojs/cloudflare';
 
-// import node from '@astrojs/node';
+import db from '@astrojs/db';
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,7 +15,7 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: 'cloudflare',
   }),
-  integrations: [mdx(), sitemap()],
+  integrations: [mdx(), sitemap(), db()],
   security: {
     checkOrigin: false
   }
