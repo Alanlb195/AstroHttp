@@ -16,5 +16,4 @@ export default defineConfig({
     imageService: 'cloudflare',
   }),
   integrations: [mdx(), sitemap()],
-
 });
