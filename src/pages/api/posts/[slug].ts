@@ -100,11 +100,14 @@ export const DELETE: APIRoute = async ({ params, request }) => {
         JSON.stringify({
             method: 'DELETE',
             slug: slug,
-        })
-        , {
+        }),
+        {
             status: 200,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
             }
         }
     );
