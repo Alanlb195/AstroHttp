@@ -11,11 +11,10 @@ import cloudflare from '@astrojs/cloudflare';
 export default defineConfig({
   site: 'https://example.com',
 
-  // output: "static",
-  // adapter: node({
-  //   mode: 'standalone',
-  // }),
+  output: "static",
+  adapter: cloudflare({
+    imageService: 'cloudflare',
+  }),
   integrations: [mdx(), sitemap()],
 
-  adapter: cloudflare(),
 });
