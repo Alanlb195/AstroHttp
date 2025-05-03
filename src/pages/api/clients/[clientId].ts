@@ -5,45 +5,48 @@ import { Clients, db, eq } from 'astro:db';
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params }) => {
+
     const clientId = params.clientId ?? '';
-    const id = Number(clientId);
+    try {
 
-    if (isNaN(id)) {
-        return new Response(
-            JSON.stringify({ msg: `Invalid client ID: ${clientId}` }),
-            {
-                status: 400,
-                headers: {
-                    'Content-Type': 'application/json'
+        const clientFound = await db.select().from(Clients)
+            .where(eq(Clients.id, +clientId))
+
+        if (clientFound.length > 0) {
+            return new Response(
+                JSON.stringify(clientFound.at(0)),
+                {
+                    status: 200,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 }
-            }
-        );
-    }
-
-    const clients = await db.select().from(Clients)
-        .where(eq(Clients.id, id));
-
-    if (clients.length > 0) {
-        return new Response(
-            JSON.stringify(clients[0]),
-            {
-                status: 200,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-    }
-
-    return new Response(
-        JSON.stringify({ msg: `Client with id: ${clientId} not found` }),
-        {
-            status: 404,
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            );
         }
-    );
+
+        return new Response(
+            JSON.stringify({ msj: `Client with id: ${clientId} not found` }),
+            {
+                status: 404,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+
+
+    } catch (error) {
+        return new Response(
+            JSON.stringify({ msj: `Sorry, there was an error finding client with id: ${clientId}` }),
+            {
+                status: 500,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+    }
+
 };
 export const PATCH: APIRoute = async ({ params, request }) => {
     try {
