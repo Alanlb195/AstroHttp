@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "dev:remote": "astro dev --remote",
     "build": "astro build --remote",
+    "db:push": "astro db push --remote",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -16,6 +17,12 @@
     "@astrojs/node": "^9.2.1",
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.3.1",
-    "astro": "^5.7.10"
+    "@astrojs/vue": "^5.0.13",
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/lodash.debounce": "^4.0.9",
+    "astro": "^5.7.10",
+    "canvas-confetti": "^1.9.3",
+    "lodash.debounce": "^4.0.8",
+    "vue": "^3.5.13"
   }
 }

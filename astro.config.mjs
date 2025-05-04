@@ -8,11 +8,14 @@ import db from '@astrojs/db';
 import netlify from '@astrojs/netlify';
 
 
+import vue from '@astrojs/vue';
+
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://example.com',
   output: "static",
-  integrations: [mdx(), sitemap(), db()],
+  integrations: [mdx(), sitemap(), db(), vue()],
 
   security: {
     checkOrigin: false
