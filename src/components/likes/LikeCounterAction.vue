@@ -1,5 +1,4 @@
 <template>
-
     <div v-if="isLoading">
         Loading...
     </div>
@@ -13,9 +12,7 @@
         Likes
         <span>{{ likeCount }}</span>
     </button>
-
 </template>
-
 
 <script lang="ts" setup>
 import { actions } from 'astro:actions';
@@ -23,28 +20,29 @@ import confetti from 'canvas-confetti';
 import debounce from 'lodash.debounce';
 import { ref, watch } from 'vue';
 
-
 interface Props {
     postId: string
 }
 
 const props = defineProps<Props>();
-
 const likeCount = ref(0);
 const likeClicks = ref(0);
 const isLoading = ref(true);
 
+watch(likeCount, debounce(async () => {
 
-watch(likeCount, debounce(() => {
-    // console.log('New likes', likeCount.value);
-
-    fetch(`/api/posts/likes/${props.postId}`, {
+     fetch(`/api/posts/likes/${props.postId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ likes: likeClicks.value })
     });
+
+    // await actions.updatePostLikes({
+    //     postId: props.postId,
+    //     increment: likeClicks.value
+    // });
 
     likeClicks.value = 0;
 
@@ -53,20 +51,16 @@ watch(likeCount, debounce(() => {
 const likePost = async () => {
     likeCount.value++;
     likeClicks.value++;
-
-
-    const { data, error } = await actions.getGreeting({
-        name: "Alan",
-        age: 39,
-        isActive: true,
-    });
-
-    if (error) {
-        return alert('Something went wrong');
-    }
-
-    console.log(data);
-
+    
+    // JUST TESTING ACTIONS INSTEAD OF API METHODS
+    // const { data, error } = await actions.getGreeting({
+    //     name: "Alan",
+    //     age: 39,
+    //     isActive: true,
+    // });
+    // if (error) {
+    //     return alert('Something went wrong');
+    // }
 
     confetti({
         particleCount: 100,
@@ -79,21 +73,16 @@ const likePost = async () => {
 }
 
 const getCurrentLikes = async () => {
-    const resp = await fetch(`/api/posts/likes/${props.postId}`);
-    if (!resp.ok) return;
-
-    const data = await resp.json();
-    // console.log({currentLikes: data});
+    const { data, error } = await actions.getPostLikes(props.postId)
+    if (error) {
+        return alert(error);
+    }
     likeCount.value = data.likes;
     isLoading.value = false;
 }
-
 getCurrentLikes();
 
-
 </script>
-
-
 
 <style scoped>
 button {
